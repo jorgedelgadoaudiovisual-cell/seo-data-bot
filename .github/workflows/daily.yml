@@ -1,0 +1,53 @@
+# data-bot — cron diario que publica datasets de tendencias de GitHub
+#
+# Qué hace:
+#   1. scripts/collect.js consulta la API pública de GitHub (SIN autenticación,
+#      60 req/hora anónimas) y guarda snapshots versionados en data/datasets/.
+#   2. scripts/build-page.js genera site/index.html con el ranking del día.
+#   3. Los cambios se commitean al repo y (opcional) se publican con GitHub Pages.
+#
+# Requisitos en el repositorio de GitHub:
+#   - Settings → Actions → General → Workflow permissions: "Read and write permissions"
+#     (para que el workflow pueda commitear los datasets).
+#   - Para publicar la web: Settings → Pages → Source: "GitHub Actions"
+#     (o despliega la carpeta site/ donde prefieras).
+#
+# Sin secretos: no usa tokens ni claves.
+
+name: daily-data-bot
+
+on:
+  schedule:
+    # Todos los días a las 06:00 UTC
+    - cron: "0 6 * * *"
+  workflow_dispatch: {} # permite ejecutarlo manualmente desde la pestaña Actions
+
+permissions:
+  contents: write
+
+jobs:
+  collect-and-publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+
+      - name: Recolectar datos y generar página
+        run: npm run run
+
+      - name: Commit de datasets y página
+        run: |
+          git config user.name "data-bot"
+          git config user.email "data-bot@users.noreply.github.com"
+          git add data/ site/
+          if git diff --cached --quiet; then
+            echo "Sin cambios: nada que commitear."
+          else
+            git commit -m "📊 datasets $(date -u +%F)"
+            git push
+          fi

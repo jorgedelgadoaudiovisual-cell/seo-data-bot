@@ -1,0 +1,2 @@
+# Este directorio recibe los datasets versionados generados por scripts/collect.js
+# (data/datasets/YYYY-MM-DD.json y .csv). Se crean automáticamente en cada ejecución.
