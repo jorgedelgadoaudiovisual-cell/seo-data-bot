@@ -1,6 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-  <url><loc>https://datos.jdaudiovisual.online/</loc><lastmod>2026-09-20</lastmod><changefreq>daily</changefreq><priority>1.0</priority></url>
+  <url><loc>https://datos.jdaudiovisual.online/</loc><lastmod>2026-09-21</lastmod><changefreq>daily</changefreq><priority>1.0</priority></url>
   <url><loc>https://datos.jdaudiovisual.online/datasets/2026-09-20.csv</loc><lastmod>2026-09-20</lastmod><changefreq>daily</changefreq><priority>0.6</priority></url>
   <url><loc>https://datos.jdaudiovisual.online/datasets/2026-09-20.json</loc><lastmod>2026-09-20</lastmod><changefreq>daily</changefreq><priority>0.6</priority></url>
+  <url><loc>https://datos.jdaudiovisual.online/datasets/2026-09-21.csv</loc><lastmod>2026-09-21</lastmod><changefreq>daily</changefreq><priority>0.6</priority></url>
+  <url><loc>https://datos.jdaudiovisual.online/datasets/2026-09-21.json</loc><lastmod>2026-09-21</lastmod><changefreq>daily</changefreq><priority>0.6</priority></url>
 </urlset>
