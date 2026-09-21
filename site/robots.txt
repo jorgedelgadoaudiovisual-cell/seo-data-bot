@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://datos.jdaudiovisual.online/sitemap.xml
