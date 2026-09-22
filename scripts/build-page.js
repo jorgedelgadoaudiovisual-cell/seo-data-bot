@@ -71,7 +71,16 @@ function main() {
     const isJson = f.endsWith(".json");
     const kb = st.size / 1024;
     const size = kb > 1024 ? (kb / 1024).toFixed(1) + " MB" : Math.max(1, Math.round(kb)) + " KB";
-    return { f, isJson, size, date: f.slice(0, 10) };
+    let rows = 30;
+    try {
+      if (isJson) {
+        const j = JSON.parse(readFileSync(join(SITE_DATASETS, f), "utf8"));
+        rows = (j.repos && j.repos.length) || j.count || rows;
+      } else {
+        rows = Math.max(0, readFileSync(join(SITE_DATASETS, f), "utf8").trim().split("\n").length - 1);
+      }
+    } catch (e) { /* conserva el valor por defecto */ }
+    return { f, isJson, size, rows, date: f.slice(0, 10) };
   });
 
   // Top lenguajes del snapshot actual
@@ -133,6 +142,7 @@ a:hover{text-decoration:underline}
 .btn{display:inline-flex;align-items:center;gap:.5rem;font-weight:600;border-radius:999px;
   padding:.72rem 1.5rem;font-size:.95rem;min-height:44px;border:1px solid transparent;cursor:pointer;transition:transform .25s ease,box-shadow .25s ease}
 .btn:hover{text-decoration:none;transform:translateY(-2px)}
+.btn svg{width:18px;height:18px;flex:none}
 .btn-primary{background:linear-gradient(90deg,var(--cyan),var(--indigo));color:#06121f;
   box-shadow:0 8px 30px -8px rgba(34,211,238,.4)}
 .btn-ghost{border-color:var(--line);color:var(--ink);background:rgba(17,29,51,.5)}
@@ -229,17 +239,44 @@ p.sub{color:var(--muted);max-width:64ch;margin-bottom:2.4rem}
 .ds-hero .ov{position:absolute;inset:0;background:linear-gradient(100deg,rgba(6,10,20,.94) 20%,rgba(6,10,20,.45) 60%,rgba(6,10,20,.15));display:flex;align-items:center;padding:2rem}
 .ds-hero h3{font-family:var(--font-d);font-size:clamp(1.4rem,3vw,2rem);letter-spacing:-.02em;margin-bottom:.4rem}
 .ds-hero p{color:var(--muted);max-width:52ch}
-.ds-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:1rem;margin-bottom:1.6rem}
-.ds{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:1.15rem 1.25rem;
-  display:flex;flex-direction:column;gap:.7rem;transition:transform .25s ease,border-color .25s ease;box-shadow:0 2px 12px rgba(0,0,0,.45)}
-.ds:hover{transform:translateY(-3px);border-color:rgba(129,140,248,.5)}
-.ds-top{display:flex;align-items:center;gap:.6rem}
-.fmt{font-size:.7rem;font-weight:700;letter-spacing:.08em;padding:.28rem .7rem;border-radius:6px}
-.fmt.json{background:rgba(52,211,153,.13);color:var(--green);border:1px solid rgba(52,211,153,.35)}
-.fmt.csv{background:rgba(251,191,36,.12);color:var(--amber);border:1px solid rgba(251,191,36,.35)}
-.ds-name{font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace;font-size:.85rem;overflow-wrap:anywhere}
-.ds-meta{font-size:.78rem;color:var(--muted)}
-.ds .btn{margin-top:auto;justify-content:center}
+.ds-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(272px,1fr));gap:1.1rem;margin-bottom:1.6rem}
+.ds{position:relative;background:linear-gradient(180deg,#13203a,#101b31);border:1px solid var(--line);border-radius:18px;
+  padding:1.25rem 1.3rem 1.3rem;display:flex;flex-direction:column;gap:1.05rem;overflow:hidden;
+  transition:transform .3s ease,border-color .3s ease,box-shadow .3s ease;box-shadow:0 2px 12px rgba(0,0,0,.45)}
+.ds::before{content:"";position:absolute;top:0;left:0;right:0;height:3px;background:var(--accent,var(--indigo))}
+.ds.json{--accent:var(--green)}
+.ds.csv{--accent:var(--amber)}
+.ds:hover{transform:translateY(-4px)}
+.ds.json:hover{border-color:rgba(52,211,153,.55);box-shadow:0 18px 40px -14px rgba(52,211,153,.30)}
+.ds.csv:hover{border-color:rgba(251,191,36,.55);box-shadow:0 18px 40px -14px rgba(251,191,36,.30)}
+.ds-head{display:flex;align-items:center;gap:.9rem}
+.file-ico{width:52px;height:52px;flex:none;border-radius:14px;display:grid;place-items:center;
+  background:rgba(52,211,153,.10);border:1px solid rgba(52,211,153,.38);box-shadow:inset 0 1px 0 rgba(255,255,255,.06)}
+.ds.csv .file-ico{background:rgba(251,191,36,.10);border-color:rgba(251,191,36,.38)}
+.file-ico svg{width:32px;height:32px}
+.ds.json .file-ico svg{color:var(--green)}
+.ds.csv .file-ico svg{color:var(--amber)}
+.ds-id{min-width:0;flex:1}
+.ds-name{font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace;font-size:.88rem;font-weight:600;overflow-wrap:anywhere}
+.ds-meta{font-size:.78rem;color:var(--muted);margin-top:.18rem}
+.new-badge{position:absolute;top:1.15rem;right:1.2rem;font-size:.66rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--green);
+  background:rgba(52,211,153,.12);border:1px solid rgba(52,211,153,.42);border-radius:999px;padding:.3rem .72rem;
+  display:inline-flex;align-items:center;gap:.4rem}
+.ds.has-new .ds-head{padding-right:4.4rem}
+.new-badge i{width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green);font-style:normal}
+.btn-dl{margin-top:auto;justify-content:center;background:linear-gradient(92deg,var(--cyan),var(--indigo));color:#06121f;
+  border:none;font-weight:700;box-shadow:0 10px 26px -10px rgba(34,211,238,.5)}
+.btn-dl:hover{color:#06121f;text-decoration:none;box-shadow:0 14px 34px -10px rgba(34,211,238,.65)}
+.btn-dl svg{transition:transform .25s ease}
+.btn-dl:hover svg{transform:translateY(2px)}
+.schema{display:flex;align-items:center;gap:1rem;flex-wrap:wrap;background:rgba(17,29,51,.62);border:1px solid var(--line);
+  border-radius:var(--radius);padding:.95rem 1.25rem;margin-bottom:1.4rem}
+.schema-label{font-size:.84rem;font-weight:600;color:var(--ink);white-space:nowrap}
+.schema-label b{color:var(--cyan)}
+.schema-chips{display:flex;gap:.45rem;flex-wrap:wrap}
+.schema-chips span{font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace;font-size:.74rem;color:var(--muted);
+  background:#0d1730;border:1px solid var(--line);border-radius:6px;padding:.24rem .62rem}
+.schema-chips span.hl{color:var(--cyan);border-color:rgba(34,211,238,.35)}
 .note{color:var(--muted);font-size:.9rem;display:flex;gap:.6rem;align-items:flex-start}
 .note svg{width:16px;height:16px;stroke:var(--cyan);flex:none;margin-top:.25rem}
 /* ---------- features ---------- */
@@ -272,7 +309,9 @@ footer{border-top:1px solid var(--line);padding:2.6rem 0 2rem;background:var(--b
 const I = {
   star: '<svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>',
   fork: '<svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="18" r="3"/><circle cx="6" cy="6" r="3"/><circle cx="18" cy="6" r="3"/><path d="M18 9v1a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2V9"/><path d="M12 12v3"/></svg>',
-  download: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>',
+  download: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v11"/><polyline points="7 10.5 12 15.5 17 10.5"/><path d="M4.5 16.5v2.7a1.8 1.8 0 0 0 1.8 1.8h11.4a1.8 1.8 0 0 0 1.8-1.8v-2.7"/></svg>',
+  fileJson: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><text x="12" y="16.8" text-anchor="middle" font-size="5" font-weight="700" fill="currentColor" stroke="none" font-family="Space Grotesk,Inter,sans-serif" letter-spacing=".5">JSON</text></svg>',
+  fileCsv: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><text x="12" y="16.8" text-anchor="middle" font-size="5.4" font-weight="700" fill="currentColor" stroke="none" font-family="Space Grotesk,Inter,sans-serif" letter-spacing=".8">CSV</text></svg>',
   search: '<svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.3-4.3"/></svg>',
   zap: '<svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"/></svg>',
   globe: '<svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M2 12h20"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>',
@@ -305,11 +344,16 @@ const langRows = topLangs.map(([l, n]) => `
       </div>`).join("");
 
 const dsCards = fileMeta.map((m) => `
-    <div class="ds reveal">
-      <div class="ds-top"><span class="fmt ${m.isJson ? "json" : "csv"}">${m.isJson ? "JSON" : "CSV"}</span></div>
-      <div class="ds-name">${esc(m.f)}</div>
-      <div class="ds-meta">${esc(m.size)} · snapshot del ${esc(m.date)}</div>
-      <a class="btn btn-ghost btn-sm" href="datasets/${esc(m.f)}" download>${I.download} Descargar</a>
+    <div class="ds ${m.isJson ? "json" : "csv"} reveal${m.date === date ? " has-new" : ""}">
+      <div class="ds-head">
+        <span class="file-ico" aria-hidden="true">${m.isJson ? I.fileJson : I.fileCsv}</span>
+        <div class="ds-id">
+          <div class="ds-name">${esc(m.f)}</div>
+          <div class="ds-meta">${esc(m.size)} · ${esc(m.date)} · ${m.rows} registros</div>
+        </div>
+        ${m.date === date ? '<span class="new-badge"><i></i>Hoy</span>' : ""}
+      </div>
+      <a class="btn btn-dl" href="datasets/${esc(m.f)}" download aria-label="Descargar ${esc(m.f)}">${I.download} Descargar ${m.isJson ? "JSON" : "CSV"}</a>
     </div>`).join("");
 
 const tickerItems = repos.slice(0, 12).map((r, i) =>
@@ -415,13 +459,17 @@ html += `
   <div class="wrap">
     <p class="kicker reveal">Datos abiertos</p>
     <h2 class="title reveal">Descarga los datasets</h2>
-    <p class="sub reveal">Snapshots diarios versionados por fecha, libres para usar en tus análisis, dashboards y estudios SEO. Formatos JSON y CSV.</p>
+    <p class="sub reveal">Snapshots diarios versionados por fecha: 30 repos por archivo, listos para tus análisis, dashboards y estudios SEO. Licencia MIT (uso comercial permitido), sin registro. Formatos JSON y CSV.</p>
     <div class="ds-hero reveal">
       <img src="assets/img/datasets-banner.jpg" alt="Archivo digital de datasets" loading="lazy" width="1600" height="460">
       <div class="ov"><div>
         <h3>Un archivo que crece cada día</h3>
         <p>Cada mañana un nuevo snapshot se suma al histórico. Sin registro, sin API keys, sin límites: descarga directa.</p>
       </div></div>
+    </div>
+    <div class="schema reveal">
+      <span class="schema-label">Cada snapshot trae <b>30 repos</b> con</span>
+      <div class="schema-chips"><span>rank</span><span>repo</span><span>descripción</span><span class="hl">★ estrellas</span><span>forks</span><span>issues</span><span>lenguaje</span><span>url</span><span>owner</span><span>fechas</span></div>
     </div>
     <div class="ds-grid">${dsCards}</div>
     <p class="note reveal">${I.check}<span>También puedes explorar la <a href="datasets/">carpeta completa de datasets</a> o automatizar descargas enlazando directamente a cada archivo versionado.</span></p>
@@ -706,12 +754,148 @@ html += `
   mkdirSync(SITE, { recursive: true });
   writeFileSync(join(SITE, "index.html"), html);
 
+  // ---------- Página de la carpeta de datasets (/datasets/) ----------
+  // Evita el 404 de los enlaces "Carpeta de datasets": lista todos los
+  // snapshots agrupados por fecha. Se regenera a diario junto a index.html.
+  const byDate = {};
+  for (const m of fileMeta) (byDate[m.date] = byDate[m.date] || []).push(m);
+  const datesDesc = Object.keys(byDate).sort().reverse();
+  const MESES = ["enero","febrero","marzo","abril","mayo","junio","julio","agosto","septiembre","octubre","noviembre","diciembre"];
+  const fechaLarga = (d) => {
+    const p = d.split("-");
+    return `${parseInt(p[2], 10)} de ${MESES[parseInt(p[1], 10) - 1]} de ${p[0]}`;
+  };
+  const folderCard = (m) => `
+    <div class="ds ${m.isJson ? "json" : "csv"}${m.date === date ? " has-new" : ""}">
+      <div class="ds-head">
+        <span class="file-ico" aria-hidden="true">${m.isJson ? I.fileJson : I.fileCsv}</span>
+        <div class="ds-id">
+          <div class="ds-name">${esc(m.f)}</div>
+          <div class="ds-meta">${esc(m.size)} · ${m.rows} registros</div>
+        </div>
+        ${m.date === date ? '<span class="new-badge"><i></i>Hoy</span>' : ""}
+      </div>
+      <a class="btn btn-dl" href="${esc(m.f)}" download aria-label="Descargar ${esc(m.f)}">${I.download} Descargar ${m.isJson ? "JSON" : "CSV"}</a>
+    </div>`;
+  const folderGroups = datesDesc.map((d) => `
+    <section class="ds-day" data-date="${esc(d)}">
+      <div class="ds-day-head">
+        <h2 class="day-title">${d === date ? '<span class="grad">Hoy</span> · ' : ""}${esc(fechaLarga(d))}</h2>
+        <span class="day-count">${byDate[d].length} archivo${byDate[d].length === 1 ? "" : "s"}</span>
+      </div>
+      <div class="ds-grid">${byDate[d].map(folderCard).join("")}</div>
+    </section>`).join("");
+  const cssFolder = `
+/* ---------- carpeta de datasets ---------- */
+.folder-top{padding:4.5rem 0 1rem}
+.folder-top h1{font-family:var(--font-d);font-weight:700;letter-spacing:-.02em;font-size:clamp(2rem,5vw,3.2rem);line-height:1.08;margin-bottom:.9rem}
+.ds-day{margin:2.6rem 0 0}
+.ds-day-head{display:flex;align-items:baseline;justify-content:space-between;gap:1rem;flex-wrap:wrap;margin-bottom:1.2rem;
+  padding-bottom:.8rem;border-bottom:1px solid var(--line)}
+.day-title{font-family:var(--font-d);font-size:1.35rem;letter-spacing:-.01em}
+.day-count{font-size:.82rem;color:var(--muted);background:#0d1730;border:1px solid var(--line);border-radius:999px;padding:.28rem .9rem}
+.codebox{font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace;font-size:.8rem;background:#0d1730;border:1px solid var(--line);
+  border-radius:10px;padding:.85rem 1.1rem;color:var(--muted);overflow-x:auto;white-space:nowrap;margin-top:1rem}
+.codebox b{color:var(--cyan);font-weight:600}`;
+  const folderHtml = `<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Carpeta de datasets — DataBot | Snapshots diarios de GitHub en JSON y CSV</title>
+<meta name="description" content="Archivo completo de datasets diarios de tendencias de GitHub: snapshots versionados por fecha en JSON y CSV, licencia MIT, descarga directa sin registro.">
+<link rel="canonical" href="${CANONICAL}/datasets/">
+<meta name="robots" content="index, follow">
+<meta name="theme-color" content="#0b1220">
+<meta property="og:type" content="website">
+<meta property="og:locale" content="es_ES">
+<meta property="og:site_name" content="DataBot — Tendencias de GitHub">
+<meta property="og:title" content="Carpeta de datasets — DataBot">
+<meta property="og:description" content="Todos los snapshots diarios de tendencias de GitHub en JSON y CSV. Datos abiertos, licencia MIT.">
+<meta property="og:url" content="${CANONICAL}/datasets/">
+<meta property="og:image" content="${CANONICAL}/assets/img/og-cover.jpg">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Carpeta de datasets — DataBot">
+<meta name="twitter:description" content="Archivo completo de snapshots diarios en JSON y CSV.">
+<meta name="twitter:image" content="${CANONICAL}/assets/img/og-cover.jpg">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Crect width='24' height='24' rx='6' fill='%2322d3ee'/%3E%3C/svg%3E">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Space+Grotesk:wght@500;600;700&display=swap" rel="stylesheet">
+<style>${css}${cssFolder}</style>
+</head>
+<body>
+<nav class="nav" aria-label="Navegación principal">
+  <div class="nav-in">
+    <a class="brand" href="../"><span class="brand-mark">${I.logo}</span> DataBot</a>
+    <div class="nav-links">
+      <a href="../#ranking">Ranking</a>
+      <a href="../#lenguajes">Lenguajes</a>
+      <a href="../#datasets">Datasets</a>
+      <a href="../#como-funciona">Cómo funciona</a>
+    </div>
+    <a class="btn btn-primary btn-sm nav-cta" href="../#datasets">${I.download} Datos abiertos</a>
+  </div>
+</nav>
+
+<main class="wrap">
+  <div class="folder-top">
+    <p class="kicker">Archivo abierto</p>
+    <h1>Carpeta de <span class="grad">datasets</span></h1>
+    <p class="sub">Todos los snapshots diarios de tendencias de GitHub, versionados por fecha. ${fileMeta.length} archivos publicados · Licencia MIT (uso comercial permitido) · Sin registro.</p>
+    <div class="filterbar">
+      ${I.search}
+      <input type="search" id="dsFilter" placeholder="Filtrar por fecha o formato… (ej: 2026-09-21, csv)" aria-label="Filtrar datasets">
+    </div>
+  </div>
+  ${folderGroups}
+  <p class="note" style="margin:2.6rem 0 0">${I.check}<span>Automatiza tus descargas enlazando directamente a cada archivo versionado:</span></p>
+  <div class="codebox"><b>curl -O</b> ${CANONICAL}/datasets/${esc(datesDesc[0] || date)}.csv</div>
+</main>
+
+<footer style="margin-top:4rem">
+  <div class="wrap">
+    <div class="foot-grid">
+      <a class="brand" href="../"><span class="brand-mark">${I.logo}</span> DataBot</a>
+      <p class="foot-note">Datos: GitHub REST API (pública, sin autenticación). Generado automáticamente cada día con GitHub Actions. Los datasets son snapshots de datos públicos de GitHub bajo licencia MIT.</p>
+    </div>
+    <div class="foot-base">
+      <span>© ${esc(date.slice(0, 4))} DataBot · Tendencias de GitHub en datos abiertos</span>
+      <span><a href="../#datasets">Volver a datasets</a> · <a href="../#top">Volver arriba</a></span>
+    </div>
+  </div>
+</footer>
+<script>
+(function(){
+  "use strict";
+  var input = document.getElementById("dsFilter");
+  if (!input) return;
+  input.addEventListener("input", function () {
+    var q = input.value.trim().toLowerCase();
+    document.querySelectorAll(".ds-day").forEach(function (sec) {
+      var vis = 0;
+      sec.querySelectorAll(".ds").forEach(function (c) {
+        var name = c.querySelector(".ds-name").textContent.toLowerCase();
+        var hit = !q || name.indexOf(q) !== -1;
+        c.style.display = hit ? "" : "none";
+        if (hit) vis++;
+      });
+      sec.style.display = vis ? "" : "none";
+    });
+  });
+})();
+</script>
+</body>
+</html>`;
+  writeFileSync(join(SITE_DATASETS, "index.html"), folderHtml);
+
   // robots.txt + sitemap.xml
   writeFileSync(join(SITE, "robots.txt"),
     "User-agent: *\nAllow: /\nSitemap: " + CANONICAL + "/sitemap.xml\n");
   const sm = [`<?xml version="1.0" encoding="UTF-8"?>`,
     `<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">`,
-    `  <url><loc>${CANONICAL}/</loc><lastmod>${date}</lastmod><changefreq>daily</changefreq><priority>1.0</priority></url>`];
+    `  <url><loc>${CANONICAL}/</loc><lastmod>${date}</lastmod><changefreq>daily</changefreq><priority>1.0</priority></url>`,
+    `  <url><loc>${CANONICAL}/datasets/</loc><lastmod>${date}</lastmod><changefreq>daily</changefreq><priority>0.7</priority></url>`];
   for (const m of fileMeta) {
     sm.push(`  <url><loc>${CANONICAL}/datasets/${esc(m.f)}</loc><lastmod>${esc(m.date)}</lastmod><changefreq>daily</changefreq><priority>0.6</priority></url>`);
   }
