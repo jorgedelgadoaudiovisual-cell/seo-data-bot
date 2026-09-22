@@ -56,6 +56,7 @@ a:hover{text-decoration:underline}
 .btn{display:inline-flex;align-items:center;gap:.5rem;font-weight:600;border-radius:999px;
   padding:.72rem 1.5rem;font-size:.95rem;min-height:44px;border:1px solid transparent;cursor:pointer;transition:transform .25s ease,box-shadow .25s ease}
 .btn:hover{text-decoration:none;transform:translateY(-2px)}
+.btn svg{width:18px;height:18px;flex:none}
 .btn-primary{background:linear-gradient(90deg,var(--cyan),var(--indigo));color:#06121f;
   box-shadow:0 8px 30px -8px rgba(34,211,238,.4)}
 .btn-ghost{border-color:var(--line);color:var(--ink);background:rgba(17,29,51,.5)}
@@ -152,17 +153,44 @@ p.sub{color:var(--muted);max-width:64ch;margin-bottom:2.4rem}
 .ds-hero .ov{position:absolute;inset:0;background:linear-gradient(100deg,rgba(6,10,20,.94) 20%,rgba(6,10,20,.45) 60%,rgba(6,10,20,.15));display:flex;align-items:center;padding:2rem}
 .ds-hero h3{font-family:var(--font-d);font-size:clamp(1.4rem,3vw,2rem);letter-spacing:-.02em;margin-bottom:.4rem}
 .ds-hero p{color:var(--muted);max-width:52ch}
-.ds-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:1rem;margin-bottom:1.6rem}
-.ds{background:var(--card);border:1px solid var(--line);border-radius:var(--radius);padding:1.15rem 1.25rem;
-  display:flex;flex-direction:column;gap:.7rem;transition:transform .25s ease,border-color .25s ease;box-shadow:0 2px 12px rgba(0,0,0,.45)}
-.ds:hover{transform:translateY(-3px);border-color:rgba(129,140,248,.5)}
-.ds-top{display:flex;align-items:center;gap:.6rem}
-.fmt{font-size:.7rem;font-weight:700;letter-spacing:.08em;padding:.28rem .7rem;border-radius:6px}
-.fmt.json{background:rgba(52,211,153,.13);color:var(--green);border:1px solid rgba(52,211,153,.35)}
-.fmt.csv{background:rgba(251,191,36,.12);color:var(--amber);border:1px solid rgba(251,191,36,.35)}
-.ds-name{font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace;font-size:.85rem;overflow-wrap:anywhere}
-.ds-meta{font-size:.78rem;color:var(--muted)}
-.ds .btn{margin-top:auto;justify-content:center}
+.ds-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(272px,1fr));gap:1.1rem;margin-bottom:1.6rem}
+.ds{position:relative;background:linear-gradient(180deg,#13203a,#101b31);border:1px solid var(--line);border-radius:18px;
+  padding:1.25rem 1.3rem 1.3rem;display:flex;flex-direction:column;gap:1.05rem;overflow:hidden;
+  transition:transform .3s ease,border-color .3s ease,box-shadow .3s ease;box-shadow:0 2px 12px rgba(0,0,0,.45)}
+.ds::before{content:"";position:absolute;top:0;left:0;right:0;height:3px;background:var(--accent,var(--indigo))}
+.ds.json{--accent:var(--green)}
+.ds.csv{--accent:var(--amber)}
+.ds:hover{transform:translateY(-4px)}
+.ds.json:hover{border-color:rgba(52,211,153,.55);box-shadow:0 18px 40px -14px rgba(52,211,153,.30)}
+.ds.csv:hover{border-color:rgba(251,191,36,.55);box-shadow:0 18px 40px -14px rgba(251,191,36,.30)}
+.ds-head{display:flex;align-items:center;gap:.9rem}
+.file-ico{width:52px;height:52px;flex:none;border-radius:14px;display:grid;place-items:center;
+  background:rgba(52,211,153,.10);border:1px solid rgba(52,211,153,.38);box-shadow:inset 0 1px 0 rgba(255,255,255,.06)}
+.ds.csv .file-ico{background:rgba(251,191,36,.10);border-color:rgba(251,191,36,.38)}
+.file-ico svg{width:32px;height:32px}
+.ds.json .file-ico svg{color:var(--green)}
+.ds.csv .file-ico svg{color:var(--amber)}
+.ds-id{min-width:0;flex:1}
+.ds-name{font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace;font-size:.88rem;font-weight:600;overflow-wrap:anywhere}
+.ds-meta{font-size:.78rem;color:var(--muted);margin-top:.18rem}
+.new-badge{position:absolute;top:1.15rem;right:1.2rem;font-size:.66rem;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--green);
+  background:rgba(52,211,153,.12);border:1px solid rgba(52,211,153,.42);border-radius:999px;padding:.3rem .72rem;
+  display:inline-flex;align-items:center;gap:.4rem}
+.ds.has-new .ds-head{padding-right:4.4rem}
+.new-badge i{width:6px;height:6px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green);font-style:normal}
+.btn-dl{margin-top:auto;justify-content:center;background:linear-gradient(92deg,var(--cyan),var(--indigo));color:#06121f;
+  border:none;font-weight:700;box-shadow:0 10px 26px -10px rgba(34,211,238,.5)}
+.btn-dl:hover{color:#06121f;text-decoration:none;box-shadow:0 14px 34px -10px rgba(34,211,238,.65)}
+.btn-dl svg{transition:transform .25s ease}
+.btn-dl:hover svg{transform:translateY(2px)}
+.schema{display:flex;align-items:center;gap:1rem;flex-wrap:wrap;background:rgba(17,29,51,.62);border:1px solid var(--line);
+  border-radius:var(--radius);padding:.95rem 1.25rem;margin-bottom:1.4rem}
+.schema-label{font-size:.84rem;font-weight:600;color:var(--ink);white-space:nowrap}
+.schema-label b{color:var(--cyan)}
+.schema-chips{display:flex;gap:.45rem;flex-wrap:wrap}
+.schema-chips span{font-family:ui-monospace,"SF Mono",Menlo,Consolas,monospace;font-size:.74rem;color:var(--muted);
+  background:#0d1730;border:1px solid var(--line);border-radius:6px;padding:.24rem .62rem}
+.schema-chips span.hl{color:var(--cyan);border-color:rgba(34,211,238,.35)}
 .note{color:var(--muted);font-size:.9rem;display:flex;gap:.6rem;align-items:flex-start}
 .note svg{width:16px;height:16px;stroke:var(--cyan);flex:none;margin-top:.25rem}
 /* ---------- features ---------- */
@@ -201,7 +229,7 @@ footer{border-top:1px solid var(--line);padding:2.6rem 0 2rem;background:var(--b
       <a href="#datasets">Datasets</a>
       <a href="#como-funciona">Cómo funciona</a>
     </div>
-    <a class="btn btn-primary btn-sm nav-cta" href="#datasets"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Datos abiertos</a>
+    <a class="btn btn-primary btn-sm nav-cta" href="#datasets"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v11"/><polyline points="7 10.5 12 15.5 17 10.5"/><path d="M4.5 16.5v2.7a1.8 1.8 0 0 0 1.8 1.8h11.4a1.8 1.8 0 0 0 1.8-1.8v-2.7"/></svg> Datos abiertos</a>
   </div>
 </nav>
 
@@ -214,7 +242,7 @@ footer{border-top:1px solid var(--line);padding:2.6rem 0 2rem;background:var(--b
     <p class="lead" data-hero>Cada día rastreamos los <strong>30 repositorios nuevos más populares</strong> de GitHub y los publicamos como <strong>datasets abiertos</strong> en JSON y CSV. Tendencias, lenguajes y estadísticas, listos para tus análisis SEO y de mercado.</p>
     <div class="hero-ctas" data-hero>
       <a class="btn btn-primary" href="#ranking"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg> Ver ranking de hoy</a>
-      <a class="btn btn-ghost" href="#datasets"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Descargar datasets</a>
+      <a class="btn btn-ghost" href="#datasets"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v11"/><polyline points="7 10.5 12 15.5 17 10.5"/><path d="M4.5 16.5v2.7a1.8 1.8 0 0 0 1.8 1.8h11.4a1.8 1.8 0 0 0 1.8-1.8v-2.7"/></svg> Descargar datasets</a>
     </div>
     <div class="hero-stats" data-hero>
       <div class="hstat"><b><span class="count" data-count="30">0</span></b><span>repos rastreados hoy</span></div>
@@ -654,7 +682,7 @@ footer{border-top:1px solid var(--line);padding:2.6rem 0 2rem;background:var(--b
   <div class="wrap">
     <p class="kicker reveal">Datos abiertos</p>
     <h2 class="title reveal">Descarga los datasets</h2>
-    <p class="sub reveal">Snapshots diarios versionados por fecha, libres para usar en tus análisis, dashboards y estudios SEO. Formatos JSON y CSV.</p>
+    <p class="sub reveal">Snapshots diarios versionados por fecha: 30 repos por archivo, listos para tus análisis, dashboards y estudios SEO. Licencia MIT (uso comercial permitido), sin registro. Formatos JSON y CSV.</p>
     <div class="ds-hero reveal">
       <img src="assets/img/datasets-banner.jpg" alt="Archivo digital de datasets" loading="lazy" width="1600" height="460">
       <div class="ov"><div>
@@ -662,42 +690,76 @@ footer{border-top:1px solid var(--line);padding:2.6rem 0 2rem;background:var(--b
         <p>Cada mañana un nuevo snapshot se suma al histórico. Sin registro, sin API keys, sin límites: descarga directa.</p>
       </div></div>
     </div>
+    <div class="schema reveal">
+      <span class="schema-label">Cada snapshot trae <b>30 repos</b> con</span>
+      <div class="schema-chips"><span>rank</span><span>repo</span><span>descripción</span><span class="hl">★ estrellas</span><span>forks</span><span>issues</span><span>lenguaje</span><span>url</span><span>owner</span><span>fechas</span></div>
+    </div>
     <div class="ds-grid">
-    <div class="ds reveal">
-      <div class="ds-top"><span class="fmt csv">CSV</span></div>
-      <div class="ds-name">2026-09-20.csv</div>
-      <div class="ds-meta">7 KB · snapshot del 2026-09-20</div>
-      <a class="btn btn-ghost btn-sm" href="datasets/2026-09-20.csv" download><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Descargar</a>
+    <div class="ds csv reveal">
+      <div class="ds-head">
+        <span class="file-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><text x="12" y="16.8" text-anchor="middle" font-size="5.4" font-weight="700" fill="currentColor" stroke="none" font-family="Space Grotesk,Inter,sans-serif" letter-spacing=".8">CSV</text></svg></span>
+        <div class="ds-id">
+          <div class="ds-name">2026-09-20.csv</div>
+          <div class="ds-meta">7 KB · 2026-09-20 · 30 registros</div>
+        </div>
+        
+      </div>
+      <a class="btn btn-dl" href="datasets/2026-09-20.csv" download aria-label="Descargar 2026-09-20.csv"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v11"/><polyline points="7 10.5 12 15.5 17 10.5"/><path d="M4.5 16.5v2.7a1.8 1.8 0 0 0 1.8 1.8h11.4a1.8 1.8 0 0 0 1.8-1.8v-2.7"/></svg> Descargar CSV</a>
     </div>
-    <div class="ds reveal">
-      <div class="ds-top"><span class="fmt json">JSON</span></div>
-      <div class="ds-name">2026-09-20.json</div>
-      <div class="ds-meta">15 KB · snapshot del 2026-09-20</div>
-      <a class="btn btn-ghost btn-sm" href="datasets/2026-09-20.json" download><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Descargar</a>
+    <div class="ds json reveal">
+      <div class="ds-head">
+        <span class="file-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><text x="12" y="16.8" text-anchor="middle" font-size="5" font-weight="700" fill="currentColor" stroke="none" font-family="Space Grotesk,Inter,sans-serif" letter-spacing=".5">JSON</text></svg></span>
+        <div class="ds-id">
+          <div class="ds-name">2026-09-20.json</div>
+          <div class="ds-meta">15 KB · 2026-09-20 · 30 registros</div>
+        </div>
+        
+      </div>
+      <a class="btn btn-dl" href="datasets/2026-09-20.json" download aria-label="Descargar 2026-09-20.json"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v11"/><polyline points="7 10.5 12 15.5 17 10.5"/><path d="M4.5 16.5v2.7a1.8 1.8 0 0 0 1.8 1.8h11.4a1.8 1.8 0 0 0 1.8-1.8v-2.7"/></svg> Descargar JSON</a>
     </div>
-    <div class="ds reveal">
-      <div class="ds-top"><span class="fmt csv">CSV</span></div>
-      <div class="ds-name">2026-09-21.csv</div>
-      <div class="ds-meta">7 KB · snapshot del 2026-09-21</div>
-      <a class="btn btn-ghost btn-sm" href="datasets/2026-09-21.csv" download><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Descargar</a>
+    <div class="ds csv reveal">
+      <div class="ds-head">
+        <span class="file-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><text x="12" y="16.8" text-anchor="middle" font-size="5.4" font-weight="700" fill="currentColor" stroke="none" font-family="Space Grotesk,Inter,sans-serif" letter-spacing=".8">CSV</text></svg></span>
+        <div class="ds-id">
+          <div class="ds-name">2026-09-21.csv</div>
+          <div class="ds-meta">7 KB · 2026-09-21 · 30 registros</div>
+        </div>
+        
+      </div>
+      <a class="btn btn-dl" href="datasets/2026-09-21.csv" download aria-label="Descargar 2026-09-21.csv"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v11"/><polyline points="7 10.5 12 15.5 17 10.5"/><path d="M4.5 16.5v2.7a1.8 1.8 0 0 0 1.8 1.8h11.4a1.8 1.8 0 0 0 1.8-1.8v-2.7"/></svg> Descargar CSV</a>
     </div>
-    <div class="ds reveal">
-      <div class="ds-top"><span class="fmt json">JSON</span></div>
-      <div class="ds-name">2026-09-21.json</div>
-      <div class="ds-meta">14 KB · snapshot del 2026-09-21</div>
-      <a class="btn btn-ghost btn-sm" href="datasets/2026-09-21.json" download><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Descargar</a>
+    <div class="ds json reveal">
+      <div class="ds-head">
+        <span class="file-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><text x="12" y="16.8" text-anchor="middle" font-size="5" font-weight="700" fill="currentColor" stroke="none" font-family="Space Grotesk,Inter,sans-serif" letter-spacing=".5">JSON</text></svg></span>
+        <div class="ds-id">
+          <div class="ds-name">2026-09-21.json</div>
+          <div class="ds-meta">14 KB · 2026-09-21 · 30 registros</div>
+        </div>
+        
+      </div>
+      <a class="btn btn-dl" href="datasets/2026-09-21.json" download aria-label="Descargar 2026-09-21.json"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v11"/><polyline points="7 10.5 12 15.5 17 10.5"/><path d="M4.5 16.5v2.7a1.8 1.8 0 0 0 1.8 1.8h11.4a1.8 1.8 0 0 0 1.8-1.8v-2.7"/></svg> Descargar JSON</a>
     </div>
-    <div class="ds reveal">
-      <div class="ds-top"><span class="fmt csv">CSV</span></div>
-      <div class="ds-name">2026-09-22.csv</div>
-      <div class="ds-meta">7 KB · snapshot del 2026-09-22</div>
-      <a class="btn btn-ghost btn-sm" href="datasets/2026-09-22.csv" download><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Descargar</a>
+    <div class="ds csv reveal has-new">
+      <div class="ds-head">
+        <span class="file-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><text x="12" y="16.8" text-anchor="middle" font-size="5.4" font-weight="700" fill="currentColor" stroke="none" font-family="Space Grotesk,Inter,sans-serif" letter-spacing=".8">CSV</text></svg></span>
+        <div class="ds-id">
+          <div class="ds-name">2026-09-22.csv</div>
+          <div class="ds-meta">7 KB · 2026-09-22 · 30 registros</div>
+        </div>
+        <span class="new-badge"><i></i>Hoy</span>
+      </div>
+      <a class="btn btn-dl" href="datasets/2026-09-22.csv" download aria-label="Descargar 2026-09-22.csv"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v11"/><polyline points="7 10.5 12 15.5 17 10.5"/><path d="M4.5 16.5v2.7a1.8 1.8 0 0 0 1.8 1.8h11.4a1.8 1.8 0 0 0 1.8-1.8v-2.7"/></svg> Descargar CSV</a>
     </div>
-    <div class="ds reveal">
-      <div class="ds-top"><span class="fmt json">JSON</span></div>
-      <div class="ds-name">2026-09-22.json</div>
-      <div class="ds-meta">14 KB · snapshot del 2026-09-22</div>
-      <a class="btn btn-ghost btn-sm" href="datasets/2026-09-22.json" download><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg> Descargar</a>
+    <div class="ds json reveal has-new">
+      <div class="ds-head">
+        <span class="file-ico" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><text x="12" y="16.8" text-anchor="middle" font-size="5" font-weight="700" fill="currentColor" stroke="none" font-family="Space Grotesk,Inter,sans-serif" letter-spacing=".5">JSON</text></svg></span>
+        <div class="ds-id">
+          <div class="ds-name">2026-09-22.json</div>
+          <div class="ds-meta">14 KB · 2026-09-22 · 30 registros</div>
+        </div>
+        <span class="new-badge"><i></i>Hoy</span>
+      </div>
+      <a class="btn btn-dl" href="datasets/2026-09-22.json" download aria-label="Descargar 2026-09-22.json"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v11"/><polyline points="7 10.5 12 15.5 17 10.5"/><path d="M4.5 16.5v2.7a1.8 1.8 0 0 0 1.8 1.8h11.4a1.8 1.8 0 0 0 1.8-1.8v-2.7"/></svg> Descargar JSON</a>
     </div></div>
     <p class="note reveal"><svg viewBox="0 0 24 24" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg><span>También puedes explorar la <a href="datasets/">carpeta completa de datasets</a> o automatizar descargas enlazando directamente a cada archivo versionado.</span></p>
   </div>
